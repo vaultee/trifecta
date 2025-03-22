@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant User
+    participant PAM_Module
+    participant SGX_Enclave
+    participant Quoting_Enclave
+    participant IAS as Intel Attestation Service (IAS)
+    participant System
+
+    User->>PAM_Module: Enter Credentials (Username, Password)
+    PAM_Module->>SGX_Enclave: Authenticate User
+    SGX_Enclave->>SGX_Enclave: Validate Credentials
+    SGX_Enclave->>Quoting_Enclave: Request Attestation Quote
+    Quoting_Enclave->>IAS: Send Quote for Verification
+    IAS-->>Quoting_Enclave: Return Attestation Report
+    Quoting_Enclave-->>SGX_Enclave: Verified Quote
+    SGX_Enclave->>PAM_Module: Return Authentication Result
+    PAM_Module->>System: PAM_SUCCESS / PAM_AUTH_ERR
+    System->>User: Grant / Deny Access

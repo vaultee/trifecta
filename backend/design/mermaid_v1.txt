@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant User
+    participant PAM Module
+    participant SGX Enclave
+    participant Remote Verifier
+
+    User->>PAM Module: Initiate Login
+    PAM Module->>SGX Enclave: Initialize Enclave
+    SGX Enclave->>SGX Enclave: Generate Attestation Quote
+    SGX Enclave-->>PAM Module: Return Attestation Quote
+    PAM Module->>Remote Verifier: Send Attestation Quote
+    Remote Verifier->>Remote Verifier: Verify Attestation Quote
+    alt Attestation Successful
+        Remote Verifier-->>PAM Module: Attestation Success
+        PAM Module->>SGX Enclave: Establish Secure Channel
+        User->>PAM Module: Enter Credentials
+        PAM Module->>SGX Enclave: Verify Credentials
+        SGX Enclave-->>PAM Module: Authentication Result
+        PAM Module-->>User: Login Success/Failure
+    else Attestation Failed
+        Remote Verifier-->>PAM Module: Attestation Failure
+        PAM Module-->>User: Login Failed
+    end

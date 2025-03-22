@@ -16,3 +16,4 @@ sequenceDiagram
     SGX_Enclave->>PAM_Module: Return Authentication Result
     PAM_Module->>System: PAM_SUCCESS / PAM_AUTH_ERR
     System->>User: Grant / Deny Access
+// [MermaidChart: 5bc24649-f02f-4bed-8547-6438c02b797b]

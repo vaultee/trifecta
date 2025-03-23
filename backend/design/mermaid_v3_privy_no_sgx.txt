@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant User
+    participant PAM_Module
+    participant Privy_API
+    participant System
+
+    User->>PAM_Module: Enter username & password
+    PAM_Module->>PAM_Module: Retrieve user credentials
+    PAM_Module->>Privy_API: Send authentication request (username, password)
+    Privy_API->>Privy_API: Validate credentials
+    alt Authentication successful
+        Privy_API-->>PAM_Module: Success response (token/user info)
+        PAM_Module-->>System: Grant access
+        System-->>User: Authentication successful
+    else Authentication failed
+        Privy_API-->>PAM_Module: Failure response (error message)
+        PAM_Module-->>System: Deny access
+        System-->>User: Authentication failed
+    end
+// [MermaidChart: 44e3bdd0-32ab-4934-913e-d78fe78bf0c3]

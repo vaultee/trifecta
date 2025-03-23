@@ -1,0 +1,24 @@
+
+
+/* Libc.edl - EDL sample for trusted C library. */
+
+enclave {
+    
+    include "sgx_tseal.h"
+
+    trusted {
+//        public void ecall_authenticate([out] uint8_t *auth_ret, [in, size = sealed_data_size] sgx_sealed_data_t *p_sealed_data, uint32_t sealed_data_size, [in, string] const char *username_entered,[in, string] const char *password_entered);
+        public sgx_status_t ecall_seal_data([in, string] const char* fileName, [in, size=length] void* data, int length);
+        public void ecall_verify_user_pwd([out] uint8_t *auth_ret, [in, size = sealed_data_size] void *p_sealed_data, uint32_t sealed_data_size, [in, string] const char *username_entered,[in, string] const char *password_entered, uint8_t nullok);
+
+    };
+
+    untrusted {
+//        [cdecl] void ocall_print_int(int a);
+        void ocall_print_pointer([in, string] char *val);
+        sgx_status_t save_data([in, string] const char* fileName, [in, size=length] void* data, long length);
+        void ocall_sleep(void);
+
+    };
+};
+
